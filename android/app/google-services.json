@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "481626368925",
+    "project_id": "tobeto-mobile-app-527b7",
+    "storage_bucket": "tobeto-mobile-app-527b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481626368925:android:60b1fbd26a5814da105d74",
+        "android_client_info": {
+          "package_name": "com.example.tobeto_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481626368925-728r5a34v7hv73ic946aq1r9cbjrur23.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBo34dsqnUr695Kp958tYmazYSFfXV2o-c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481626368925-728r5a34v7hv73ic946aq1r9cbjrur23.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "481626368925-1nclssse0dcenju97et5o46bm68fv0l6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tobetoMobileApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
