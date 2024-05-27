@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tobeto_mobile_app/auth/auth_service.dart';
 import 'package:tobeto_mobile_app/screens/lessons.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
@@ -20,29 +20,45 @@ class RegisterPage extends StatelessWidget {
     required this.confirmPasswordController,
   });
 
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  bool _isLoading = false;
+
   Future<void> _register(BuildContext context) async {
-    if (formKey.currentState?.validate() ?? false) {
-      if (passwordController.text != confirmPasswordController.text) {
+    if (widget.formKey.currentState?.validate() ?? false) {
+      if (widget.passwordController.text != widget.confirmPasswordController.text) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Passwords do not match')),
+          const SnackBar(content: Text('Şifreler eşleşmiyor.')),
         );
         return;
       }
 
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
+        String displayName = '${widget.firstNameController.text} ${widget.lastNameController.text}';
         await AuthService().signUpWithEmailAndPassword(
-          emailController.text,
-          passwordController.text,
+          widget.emailController.text,
+          widget.passwordController.text,
+          displayName,
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LessonsPage()),
+          MaterialPageRoute(builder: (context) => const LessonsPage()),
         );
       } catch (e) {
-        // Handle error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register: $e')),
+          SnackBar(content: Text(e.toString())),
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -51,21 +67,23 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildTextFormField('Ad*', Icons.perm_identity, firstNameController),
+        _buildTextFormField('Ad*', Icons.perm_identity, widget.firstNameController),
         const SizedBox(height: 10),
-        _buildTextFormField('Soyad*', Icons.perm_identity, lastNameController),
+        _buildTextFormField('Soyad*', Icons.perm_identity, widget.lastNameController),
         const SizedBox(height: 10),
-        _buildTextFormField('E-Posta*', Icons.mail_outline, emailController),
+        _buildTextFormField('E-Posta*', Icons.mail_outline, widget.emailController),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre*', Icons.lock, passwordController, obscureText: true),
+        _buildTextFormField('Şifre*', Icons.lock, widget.passwordController, obscureText: true),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre Tekrar*', Icons.lock, confirmPasswordController, obscureText: true),
+        _buildTextFormField('Şifre Tekrar*', Icons.lock, widget.confirmPasswordController, obscureText: true),
         const SizedBox(height: 20),
-        ElevatedButton(
+        _isLoading
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
           onPressed: () => _register(context),
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),
-            minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),
+            minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
           ),
           child: const Text(
             'Kayıt Ol',

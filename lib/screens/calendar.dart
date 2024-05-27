@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tobeto_mobile_app/widgets/dropdown_widget.dart';
 
-class LessonsPage extends StatefulWidget {
-  const LessonsPage({super.key});
+class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
 
   @override
-  State<LessonsPage> createState() => _LessonsPageState();
+  State<CalendarPage> createState() => _CalendarPageState();
 }
 
-class _LessonsPageState extends State<LessonsPage> {
+class _CalendarPageState extends State<CalendarPage> {
   final Widget svg = SvgPicture.asset(
     'img/icons/tobeto_icon.svg',
     semanticsLabel: 'Acme Logo',
@@ -23,7 +23,7 @@ class _LessonsPageState extends State<LessonsPage> {
       ),
       endDrawer: DropDownMenu(),
       body: const Center(
-        child: Text('Eğitimler'),
+        child: Text('Takvim'),
       ),
     );
   }

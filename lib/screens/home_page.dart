@@ -60,17 +60,20 @@ class _HomePageState extends State<HomePage> {
       ),
       endDrawer: DropDownMenu(),
       body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(height: 35,),
-              buildPageView(), // PageView içeren widget
-              buildHeaderText(), // Başlık metni içeren widget
-              const SizedBox(height: 40),
-              buildInfoCards(), // Bilgi kartlarını içeren widget
-              const SizedBox(height: 30),
-              buildProfileSection(), // Profil ve yorumları içeren widget
-            ],
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(height: 35,),
+                buildPageView(), // PageView içeren widget
+                buildHeaderText(), // Başlık metni içeren widget
+                const SizedBox(height: 40),
+                buildInfoCards(), // Bilgi kartlarını içeren widget
+                const SizedBox(height: 30),
+                buildProfileSection(), // Profil ve yorumları içeren widget
+              ],
+            ),
           ),
         ),
       ),
@@ -80,7 +83,7 @@ class _HomePageState extends State<HomePage> {
   // PageView içeren widget
   Widget buildPageView() {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.76, // Yükseklik oranı
+      height: MediaQuery.of(context).size.height * 0.83, // Yükseklik oranı
       child: PageView(
         children: [
           HomePageWidgets.buildCard(

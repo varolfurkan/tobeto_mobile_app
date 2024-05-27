@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tobeto_mobile_app/auth/auth_service.dart';
 import 'package:tobeto_mobile_app/screens/lessons.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -14,38 +14,57 @@ class LoginPage extends StatelessWidget {
     required this.passwordController,
   });
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _isLoading = false;
+
   Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-    if (formKey.currentState?.validate() ?? false) {
+    if (widget.formKey.currentState?.validate() ?? false) {
+      setState(() {
+        _isLoading = true;
+      });
       try {
         await AuthService().signInWithEmailAndPassword(
-          emailController.text,
-          passwordController.text,
+          widget.emailController.text,
+          widget.passwordController.text,
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LessonsPage()),
+          MaterialPageRoute(builder: (context) => const LessonsPage()),
         );
       } catch (e) {
-        // Handle error
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to sign in: $e')),
+          SnackBar(content: Text(e.toString())),
         );
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       await AuthService().signInWithGoogle();
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LessonsPage()),
+        MaterialPageRoute(builder: (context) => const LessonsPage()),
       );
     } catch (e) {
-      // Handle error
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in with Google: $e')),
+        SnackBar(content: Text('Google ile girişte bir hata oluştu.: $e')),
       );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -55,11 +74,13 @@ class LoginPage extends StatelessWidget {
 
     return Column(
       children: [
-        _buildTextFormField('E-Posta Adresi', Icons.mail_outline, emailController),
+        _buildTextFormField('E-Posta Adresi', Icons.mail_outline, widget.emailController),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre', Icons.lock_outline, passwordController, obscureText: true),
+        _buildTextFormField('Şifre', Icons.lock_outline, widget.passwordController, obscureText: true),
         const SizedBox(height: 20),
-        ElevatedButton(
+        _isLoading
+            ? const CircularProgressIndicator()
+            : ElevatedButton(
           onPressed: () => _signInWithEmailAndPassword(context),
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),

@@ -12,75 +12,73 @@ class HomePageWidgets {
     return Padding(
       padding:
           const EdgeInsets.symmetric(horizontal: 0), // Kartın yatay boşluğu
-      child: SingleChildScrollView(
-        child: Card(
-          elevation: 1,
-          shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(15), // Kartın köşe yuvarlatma değeri
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, // İçerik hizalaması
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 32.0,
-                    bottom: 24,
-                    left: 28,
-                    right: 28), // Resim etrafındaki boşluklar
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  child: Image.asset(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: 200,
-                  ),
+      child: Card(
+        elevation: 1,
+        shape: RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.circular(15), // Kartın köşe yuvarlatma değeri
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center, // İçerik hizalaması
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 32.0,
+                  bottom: 24,
+                  left: 28,
+                  right: 28), // Resim etrafındaki boşluklar
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                child: Image.asset(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 200,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(
-                    24.0), // Başlık metni etrafındaki boşluklar
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(
+                  24.0), // Başlık metni etrafındaki boşluklar
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 24.0,
-                  left: 24.0,
-                  bottom: 12,
-                ), // Açıklama metni etrafındaki boşluklar
-                child: Text(
-                  description,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 24.0,
+                left: 24.0,
+                bottom: 12,
+              ), // Açıklama metni etrafındaki boşluklar
+              child: Text(
+                description,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
                 ),
               ),
-              // İkinci açıklama metni ile arasındaki boşluk
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 24.0,
-                  left: 24.0,
-                  bottom: 12,
-                ), // İkinci açıklama metni etrafındaki boşluklar
-                child: Text(
-                  description2,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 20,
-                  ),
+            ),
+            // İkinci açıklama metni ile arasındaki boşluk
+            Padding(
+              padding: const EdgeInsets.only(
+                right: 24.0,
+                left: 24.0,
+                bottom: 12,
+              ), // İkinci açıklama metni etrafındaki boşluklar
+              child: Text(
+                description2,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -186,7 +184,7 @@ class HomePageWidgets {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.only(right: 24.0, left: 24.0, bottom: 12),
+                    const EdgeInsets.only(right: 24.0, left: 24.0, bottom: 12, top: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
