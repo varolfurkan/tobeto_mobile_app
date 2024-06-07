@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tobeto_mobile_app/widgets/dropdown_widget.dart';
-import 'package:tobeto_mobile_app/widgets/login_widget.dart';
-import 'package:tobeto_mobile_app/widgets/register_widget.dart';
+import '../widgets/drawer_menu.dart';
+import '../widgets/login_widget.dart';
+import '../widgets/register_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      endDrawer: DropDownMenu(),
+      endDrawer: DrawerMenu(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 50),
                       if (isRegisterSelected)
-                        RegisterPage(
+                        RegisterPageWidget(
                           formKey: _formKey,
                           firstNameController: _firstNameController,
                           lastNameController: _lastNameController,
@@ -80,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           confirmPasswordController: _confirmPasswordController,
                         )
                       else
-                        LoginPage(
+                        LoginPageWidget(
                           formKey: _formKey,
                           emailController: _emailController,
                           passwordController: _passwordController,

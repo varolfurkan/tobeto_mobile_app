@@ -38,6 +38,10 @@ dependencies:
   firebase_core: ^2.31.1
   firebase_auth: ^4.19.6
   google_sign_in: ^6.2.1
+  cloud_firestore: ^4.17.5
+  flutter_bloc: ^8.1.5
+  google_fonts: ^6.2.1
+  intl: ^0.19.0
 
   flutter_native_splash: ^2.4.0
 
@@ -76,6 +80,9 @@ flutter:
     - img/homepage_2.jpg
     - img/homepage_3.gif
     - img/students.png
+    - img/icons/ik_logo.svg
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

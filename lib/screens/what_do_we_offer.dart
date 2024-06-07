@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/dropdown_widget.dart';
+import '../widgets/drawer_menu.dart';
 
 class NelerSunuyoruzPage extends StatelessWidget {
   const NelerSunuyoruzPage({super.key});
@@ -11,7 +11,7 @@ class NelerSunuyoruzPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Neler Sunuyoruz?'),
       ),
-      endDrawer:  DropDownMenu(),
+      endDrawer:  DrawerMenu(),
       body: const Center(
         child: Text(
           'Neler Sunuyoruz? Sayfası',

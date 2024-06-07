@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tobeto_mobile_app/auth/auth_service.dart';
-import 'package:tobeto_mobile_app/screens/lessons.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tobeto_mobile_app/cubits/admin_cubit.dart';
+import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
+import 'package:tobeto_mobile_app/repository/user_repository.dart';
+import 'package:tobeto_mobile_app/screens/platform_page.dart';
+import 'package:tobeto_mobile_app/screens/admin_page.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPageWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
-  const LoginPage({
+  const LoginPageWidget({
     super.key,
     required this.formKey,
     required this.emailController,
@@ -15,84 +19,72 @@ class LoginPage extends StatefulWidget {
   });
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  bool _isLoading = false;
-
-  Future<void> _signInWithEmailAndPassword(BuildContext context) async {
-    if (widget.formKey.currentState?.validate() ?? false) {
-      setState(() {
-        _isLoading = true;
-      });
-      try {
-        await AuthService().signInWithEmailAndPassword(
-          widget.emailController.text,
-          widget.passwordController.text,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LessonsPage()),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _signInWithGoogle(BuildContext context) async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      await AuthService().signInWithGoogle();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LessonsPage()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Google ile girişte bir hata oluştu.: $e')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    double size = MediaQuery.of(context).size.width;
-
     return Column(
       children: [
-        _buildTextFormField('E-Posta Adresi', Icons.mail_outline, widget.emailController),
+        _buildTextFormField('E-Posta Adresi', Icons.mail_outline, emailController),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre', Icons.lock_outline, widget.passwordController, obscureText: true),
+        _buildTextFormField('Şifre', Icons.lock_outline, passwordController, obscureText: true),
         const SizedBox(height: 20),
-        _isLoading
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-          onPressed: () => _signInWithEmailAndPassword(context),
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),
-            minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
-          ),
-          child: const Text(
-            'Giriş Yap',
-            style: TextStyle(color: Colors.white),
+        BlocConsumer<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state.firebaseUser != null && !state.isAdmin) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const PlatformPage()),
+              );
+            } else if (state.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.error!)),
+              );
+            }
+          },
+          builder: (context, state) {
+            return state.isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  context.read<UserCubit>().signInWithEmailAndPassword(
+                    emailController.text,
+                    passwordController.text,
+                  );
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Colors.deepPurpleAccent.shade200),
+                minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+              ),
+              child: const Text(
+                'Giriş Yap',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          },
+        ),
+
+
+        const SizedBox(height: 20),
+        GestureDetector(
+          onTap: ()  {
+            context.read<UserCubit>().signInWithGoogle();
+            final userState = context.read<UserCubit>().state;
+            if (userState.firebaseUser != null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const PlatformPage()),
+              );
+            }
+          },
+          child: Image.asset(
+            'img/google_login.png',
+            width: MediaQuery.of(context).size.width / 2,
           ),
         ),
+        const SizedBox(height: 20),
         Padding(
-          padding: const EdgeInsets.only(left: 50.0, right: 50, top: 20),
+          padding: const EdgeInsets.only(left: 50.0, right: 50, top: 20, bottom: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -117,12 +109,17 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
-        GestureDetector(
-          onTap: () => _signInWithGoogle(context),
-          child: Image.asset(
-            'img/google_login.png',
-            width: size / 2,
+        ElevatedButton(
+          onPressed: () {
+            _showAdminLoginDialog(context);
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+            minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
+          ),
+          child: const Text(
+            'Eğitmen Girişi',
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ],
@@ -153,6 +150,69 @@ class _LoginPageState extends State<LoginPage> {
           return null;
         },
       ),
+    );
+  }
+
+  void _showAdminLoginDialog(BuildContext context) {
+    final adminEmailController = TextEditingController();
+    final adminPasswordController = TextEditingController();
+    final adminFormKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BlocProvider(
+          create: (context) => AdminCubit(UserRepository()..getCurrentUser()),
+          child: AlertDialog(
+            title: const Text('Eğitmen Girişi'),
+            content: Form(
+              key: adminFormKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildTextFormField('E-Posta Adresi', Icons.mail_outline, adminEmailController),
+                  const SizedBox(height: 10),
+                  _buildTextFormField('Şifre', Icons.lock_outline, adminPasswordController, obscureText: true),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('İptal'),
+              ),
+              BlocConsumer<AdminCubit, AdminState>(
+                listener: (context, state) {
+                  if (state.isAdmin) {
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const AdminPage()),
+                    );
+                  } else if (state.error != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.error!)),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      if (adminFormKey.currentState!.validate()) {
+                        context.read<AdminCubit>().signInAsAdmin(
+                          adminEmailController.text,
+                          adminPasswordController.text,
+                        );
+                      }
+                    },
+                    child: const Text('Giriş Yap'),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

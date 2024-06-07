@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tobeto_mobile_app/widgets/dropdown_widget.dart';
+import 'package:tobeto_mobile_app/widgets/drawer_menu.dart';
 import 'package:tobeto_mobile_app/widgets/homepage_widgets.dart';
 
-// HomePage StatefulWidget tanımı
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -58,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               semanticsLabel: 'Acme Logo'), // Uygulama logosu
         ),
       ),
-      endDrawer: DropDownMenu(),
+      endDrawer: DrawerMenu(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),

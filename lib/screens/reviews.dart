@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tobeto_mobile_app/widgets/dropdown_widget.dart';
+import 'package:tobeto_mobile_app/widgets/drawer_menu.dart';
 
 class ReviewsPage extends StatefulWidget {
   const ReviewsPage({super.key});
@@ -21,7 +21,7 @@ class _ReviewsPageState extends State<ReviewsPage> {
       appBar: AppBar(
         title: SizedBox(width: 150, child: svg),
       ),
-      endDrawer: DropDownMenu(),
+      endDrawer: DrawerMenu(),
       body: const Center(
         child: Text('Değerlendirmeler'),
       ),

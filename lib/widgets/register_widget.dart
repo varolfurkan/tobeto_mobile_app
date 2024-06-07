@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tobeto_mobile_app/auth/auth_service.dart';
-import 'package:tobeto_mobile_app/screens/lessons.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
+import 'package:tobeto_mobile_app/screens/platform_page.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPageWidget extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController firstNameController;
   final TextEditingController lastNameController;
@@ -10,7 +11,7 @@ class RegisterPage extends StatefulWidget {
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
 
-  const RegisterPage({
+  const RegisterPageWidget({
     super.key,
     required this.formKey,
     required this.firstNameController,
@@ -21,74 +22,62 @@ class RegisterPage extends StatefulWidget {
   });
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  bool _isLoading = false;
-
-  Future<void> _register(BuildContext context) async {
-    if (widget.formKey.currentState?.validate() ?? false) {
-      if (widget.passwordController.text != widget.confirmPasswordController.text) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Şifreler eşleşmiyor.')),
-        );
-        return;
-      }
-
-      setState(() {
-        _isLoading = true;
-      });
-
-      try {
-        String displayName = '${widget.firstNameController.text} ${widget.lastNameController.text}';
-        await AuthService().signUpWithEmailAndPassword(
-          widget.emailController.text,
-          widget.passwordController.text,
-          displayName,
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const LessonsPage()),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
-        );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _buildTextFormField('Ad*', Icons.perm_identity, widget.firstNameController),
+        _buildTextFormField('Ad*', Icons.perm_identity, firstNameController),
         const SizedBox(height: 10),
-        _buildTextFormField('Soyad*', Icons.perm_identity, widget.lastNameController),
+        _buildTextFormField('Soyad*', Icons.perm_identity, lastNameController),
         const SizedBox(height: 10),
-        _buildTextFormField('E-Posta*', Icons.mail_outline, widget.emailController),
+        _buildTextFormField('E-Posta*', Icons.mail_outline, emailController),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre*', Icons.lock, widget.passwordController, obscureText: true),
+        _buildTextFormField('Şifre*', Icons.lock, passwordController, obscureText: true),
         const SizedBox(height: 10),
-        _buildTextFormField('Şifre Tekrar*', Icons.lock, widget.confirmPasswordController, obscureText: true),
+        _buildTextFormField('Şifre Tekrar*', Icons.lock, confirmPasswordController, obscureText: true),
         const SizedBox(height: 20),
-        _isLoading
-            ? const CircularProgressIndicator()
-            : ElevatedButton(
-          onPressed: () => _register(context),
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),
-            minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
-          ),
-          child: const Text(
-            'Kayıt Ol',
-            style: TextStyle(color: Colors.white),
-          ),
+        BlocConsumer<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state.firebaseUser != null) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const PlatformPage()),
+              );
+            } else if (state.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.error!)),
+              );
+            }
+          },
+          builder: (context, state) {
+            return state.isLoading
+                ? const CircularProgressIndicator()
+                : ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState!.validate()) {
+                  if (passwordController.text != confirmPasswordController.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Şifreler eşleşmiyor.')),
+                    );
+                    return;
+                  }
+                  String displayName = '${firstNameController.text} ${lastNameController.text}';
+                  context.read<UserCubit>().signUpWithEmailAndPassword(
+                    emailController.text,
+                    passwordController.text,
+                    displayName,
+                  );
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all<Color>(Colors.deepPurpleAccent.shade200),
+                minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
+              ),
+              child: const Text(
+                'Kayıt Ol',
+                style: TextStyle(color: Colors.white),
+              ),
+            );
+          },
         ),
       ],
     );
