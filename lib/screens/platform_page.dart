@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
 import 'package:tobeto_mobile_app/widgets/drawer_menu.dart';
 
@@ -215,7 +214,7 @@ class PlatformPage extends StatelessWidget {
         itemCount: state.lessons!.length,
         itemBuilder: (context, index) {
           var lesson = state.lessons![index];
-          var formattedDate = DateFormat('dd MMMM yyyy HH:mm', 'tr_TR').format(lesson.createdAt);
+          var formattedDate = lesson.formattedDate();
           return Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Card(
@@ -291,7 +290,7 @@ class PlatformPage extends StatelessWidget {
         itemCount: state.notifications!.length,
         itemBuilder: (context, index) {
           var notification = state.notifications![index];
-          var formattedDate = DateFormat('dd MMMM yyyy HH:mm', 'tr_TR').format(notification.createdAt);
+          var formattedDate = notification.formattedDate();
           return Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Card(

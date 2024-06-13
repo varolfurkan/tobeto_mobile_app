@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class LessonModel {
   final String id;
@@ -21,8 +22,21 @@ class LessonModel {
       userId: data['userId'] ?? '',
       title: data['title'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      createdAt: data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : DateTime.now(),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'userId': userId,
+      'title': title,
+      'imageUrl': imageUrl,
+      'createdAt': Timestamp.fromDate(createdAt),
+    };
+  }
+
+  String formattedDate() {
+    return DateFormat('dd MMMM yyyy HH:mm', 'tr_TR').format(createdAt.toLocal());
   }
 
 }

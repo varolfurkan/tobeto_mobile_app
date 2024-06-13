@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class NotificationModel {
   final String id;
-  final String userId;
   final String title;
   final String contents;
   final String type;
@@ -10,7 +10,6 @@ class NotificationModel {
 
   NotificationModel({
     required this.id,
-    required this.userId,
     required this.title,
     required this.contents,
     required this.type,
@@ -20,25 +19,26 @@ class NotificationModel {
   factory NotificationModel.fromMap(Map<String, dynamic> data, String id) {
     return NotificationModel(
       id: id,
-      userId: data['userId'] ?? '',
       title: data['title'] ?? '',
       contents: data['contents'] ?? '',
       type: data['type'] ?? '',
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      createdAt: data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : DateTime.now(),
     );
   }
 
 
-  /*
+
     Map<String, dynamic> toMap() {
     return {
-      'userId': userId,
       'title': title,
       'contents': contents,
       'type': type,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
-   */
+
+  String formattedDate() {
+    return DateFormat('dd MMMM yyyy HH:mm', 'tr_TR').format(createdAt.toLocal());
+  }
 
 }

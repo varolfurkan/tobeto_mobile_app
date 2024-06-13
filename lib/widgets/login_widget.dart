@@ -52,9 +52,9 @@ class LoginPageWidget extends StatelessWidget {
                 }
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(
+                backgroundColor: WidgetStateProperty.all<Color>(
                     Colors.deepPurpleAccent.shade200),
-                minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+                minimumSize: WidgetStateProperty.all<Size>(const Size(200, 50)),
               ),
               child: const Text(
                 'Giriş Yap',

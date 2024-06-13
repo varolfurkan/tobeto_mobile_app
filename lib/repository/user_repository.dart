@@ -70,14 +70,14 @@ class UserRepository {
   }
 
   Future<List<LessonModel>> getLessons(String userId) async {
-    var lessonsCollection = _firestore.collection('users').doc(userId).collection('lessons');
+    var lessonsCollection = _firestore.collection('users').doc(userId).collection('fields').doc(userId).collection('fields_name');
     var lessonsSnapshot = await lessonsCollection.get();
     return lessonsSnapshot.docs.map((doc) => LessonModel.fromMap(doc.data(), doc.id)).toList();
   }
 
 
   Future<List<NotificationModel>> getNotifications(String userId) async {
-    var notificationsCollection = _firestore.collection('users').doc(userId).collection('notifications');
+    var notificationsCollection = _firestore.collection('notifications');
     var notificationsSnapshot = await notificationsCollection.get();
     return notificationsSnapshot.docs.map((doc) => NotificationModel.fromMap(doc.data(), doc.id)).toList();
   }

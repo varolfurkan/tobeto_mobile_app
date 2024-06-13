@@ -6,7 +6,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/find_locale.dart';
 import 'package:intl/intl.dart';
 import 'package:tobeto_mobile_app/cubits/admin_cubit.dart';
-import 'package:tobeto_mobile_app/cubits/platform_cubit.dart';
 import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
 import 'package:tobeto_mobile_app/firebase_options.dart';
 import 'package:tobeto_mobile_app/repository/user_repository.dart';
