@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           create: (context) => UserCubit(UserRepository()),
         ),
         BlocProvider<AdminCubit>(
-            create: (context) => AdminCubit(UserRepository()),
+            create: (context) => AdminCubit(UserRepository()..getCurrentUser()),
         ),
       ],
       child: MaterialApp(

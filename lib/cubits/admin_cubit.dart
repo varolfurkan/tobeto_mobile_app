@@ -16,6 +16,8 @@ class AdminState {
   final List<UserModel>? users;
   final List<FieldModel>? fields;
   final List<NotificationModel>? notifications;
+  final List<LessonModel>? lessons;
+  final String? selectedFieldId;
 
   AdminState({
     this.firebaseUser,
@@ -26,6 +28,8 @@ class AdminState {
     this.users,
     this.fields,
     this.notifications,
+    this.lessons,
+    this.selectedFieldId,
   });
 
   AdminState copyWith({
@@ -37,6 +41,8 @@ class AdminState {
     List<UserModel>? users,
     List<FieldModel>? fields,
     List<NotificationModel>? notifications,
+    List<LessonModel>? lessons,
+    String? selectedFieldId,
   }) {
     return AdminState(
       firebaseUser: firebaseUser ?? this.firebaseUser,
@@ -47,6 +53,8 @@ class AdminState {
       users: users ?? this.users,
       fields: fields ?? this.fields,
       notifications: notifications ?? this.notifications,
+      lessons: lessons ?? this.lessons,
+      selectedFieldId: selectedFieldId ?? this.selectedFieldId,
     );
   }
 }
@@ -62,7 +70,7 @@ class AdminCubit extends Cubit<AdminState> {
 
   Future<void> getCurrentUser() async {
     try {
-      emit(state.copyWith(isLoading: true));
+      emit(AdminState(isLoading: true));
       User? firebaseUser = _userRepository.getCurrentUser();
       bool isAdmin = false;
       String? adminName;
@@ -71,15 +79,18 @@ class AdminCubit extends Cubit<AdminState> {
         final doc = await _firestore.collection('admins').doc(firebaseUser.uid).get();
         isAdmin = doc.exists;
         adminName = doc.data()?['adminName'];
+        emit(AdminState(firebaseUser: firebaseUser, isLoading: false, isAdmin: isAdmin, adminName: adminName));
+      } else{
+        emit(AdminState(isLoading: false, isAdmin: false));
       }
 
       await loadUsers();
       await loadFields();
       await loadNotifications();
 
-      emit(state.copyWith(firebaseUser: firebaseUser, isLoading: false, isAdmin: isAdmin, adminName: adminName));
+
     } catch (e) {
-      emit(state.copyWith(error: e.toString(), isLoading: false));
+      emit(AdminState(error: e.toString(), isLoading: false));
     }
   }
 
@@ -116,7 +127,7 @@ class AdminCubit extends Cubit<AdminState> {
     try {
       emit(state.copyWith(isLoading: true));
       var fieldsSnapshot = await _firestore.collection('fields').get();
-      var fields = fieldsSnapshot.docs.map((doc) => FieldModel.fromMap(doc.data())).toList();
+      var fields = fieldsSnapshot.docs.map((doc) => FieldModel.fromMap(doc.data(),doc.id)).toList();
       emit(state.copyWith(fields: fields, isLoading: false));
     } catch (e) {
       emit(state.copyWith(error: e.toString(), isLoading: false));
@@ -134,11 +145,41 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
-  Future<void> assignLesson(String userId, LessonModel lesson) async {
+  Future<void> assignLesson(String userId, String fieldName) async {
     try {
-      await _firestore.collection('users').doc(userId).collection('fields').doc(userId).collection('fields_name').add(lesson.toMap());
+      emit(state.copyWith(isLoading: true));
+      await _userRepository.assignLesson(userId, fieldName);
+      emit(state.copyWith(isLoading: false));
     } catch (e) {
-      emit(state.copyWith(error: e.toString()));
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+    }
+  }
+
+  Future<List<LessonModel>> getFieldLessons(String fieldName) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      var lessonsSnapshot = await _userRepository.getFieldLessons(fieldName);
+      emit(state.copyWith(isLoading: false));
+      return lessonsSnapshot;
+    } catch (e) {
+      emit(state.copyWith(isLoading: false, error: e.toString()));
+      return [];
+    }
+  }
+
+  void updateSelectedFieldId(String? fieldName) async {
+    if (fieldName != null) {
+      emit(state.copyWith(selectedFieldId: fieldName));
+      try {
+        List<LessonModel> fetchedLessons = await getFieldLessons(fieldName);
+        emit(state.copyWith(lessons: fetchedLessons, isLoading: false));
+      } catch (e) {
+
+        emit(state.copyWith(error: e.toString(), isLoading: false));
+      }
+    } else {
+
+      emit(state.copyWith(selectedFieldId: null, lessons: null, isLoading: false));
     }
   }
 

@@ -227,7 +227,7 @@ class PlatformPage extends StatelessWidget {
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(top: Radius.circular(15.0)),
                     child: lesson.imageUrl.isNotEmpty
-                        ? Image.network(lesson.imageUrl)
+                        ? Image.network(lesson.imageUrl, height: 250, width: double.infinity, fit: BoxFit.cover)
                         : const Icon(Icons.photo, size: 150),
                   ),
                   Padding(

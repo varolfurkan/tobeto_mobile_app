@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:tobeto_mobile_app/cubits/admin_cubit.dart';
 import 'package:tobeto_mobile_app/models/field_model.dart';
 import 'package:tobeto_mobile_app/models/notification_model.dart';
 import 'package:tobeto_mobile_app/models/user_model.dart';
-import 'package:tobeto_mobile_app/models/lesson_model.dart';
 import 'package:tobeto_mobile_app/repository/user_repository.dart';
 import 'package:tobeto_mobile_app/widgets/drawer_menu.dart';
 
@@ -141,40 +141,94 @@ class AdminPage extends StatelessWidget {
   Widget _buildAssignLessonTab(BuildContext context, AdminState state) {
     final List<UserModel>? users = state.users;
     final List<FieldModel>? fields = state.fields;
+    String? selectedFieldId = state.selectedFieldId;
 
     if (users == null || users.isEmpty) {
       return const Center(child: Text('Kullanıcı bulunamadı.'));
     } else if (fields == null || fields.isEmpty) {
       return const Center(child: Text('Alan bulunamadı.'));
     } else {
-      return Column(
-        children: [
-          Text('Kullanıcılar:', style: GoogleFonts.poppins(textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
-          Expanded(
-            child: ListView.builder(
-              itemCount: users.length,
-              itemBuilder: (context, userIndex) {
-                return ExpansionTile(
-                  title: Text(users[userIndex].displayName),
-                  children: fields.map((field) {
-                    return ListTile(
-                      title: Text(field.fieldName),
-                      trailing: ElevatedButton(
-                        onPressed: () {
-                          _assignLesson(context, users[userIndex].uid, field);
-                        },
-                        child: const Text('Ata'),
-                      ),
-                    );
-                  }).toList(),
-                );
-              },
+      List<UserModel>? selectedUsers;
+
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text('Seçilen öğrencilerin ders atamasını yapın:', style: GoogleFonts.poppins(textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: MultiSelectDialogField<UserModel>(
+                items: users.map((user) => MultiSelectItem<UserModel>(user, user.displayName)).toList(),
+                title: const Text('Öğrenci Seçin'),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 2,
+                  ),
+                ),
+                buttonIcon: const Icon(
+                  Icons.person,
+                  color: Colors.blue,
+                ),
+                buttonText:  Text(
+                  'Öğrenci Seçin',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 16,
+                  ),
+                ),
+                onConfirm: (results) {
+                  selectedUsers = results;
+                },
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: DropdownButton<String>(
+                hint: const Text('Alan Seçin'),
+                value: selectedFieldId,
+                items: fields.map((field) {
+                  return DropdownMenuItem<String>(
+                    value: field.fieldName,
+                    child: Text(field.fieldName),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  context.read<AdminCubit>().updateSelectedFieldId(value);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (selectedUsers != null && selectedUsers!.isNotEmpty && selectedFieldId != null) {
+                    _assignLessons(context, selectedUsers!, selectedFieldId);
+                  }
+                },
+                child: const Text('Ata'),
+              ),
+            ),
+          ],
+        ),
       );
     }
   }
+
+  Future<void> _assignLessons(BuildContext context, List<UserModel> users, String? selectedFieldId) async {
+    final AdminCubit adminCubit = context.read<AdminCubit>();
+
+    if (selectedFieldId != null) {
+      await adminCubit.getFieldLessons(selectedFieldId);
+
+      for (var user in users) {
+          await adminCubit.assignLesson(user.uid, selectedFieldId);
+        }
+    }
+  }
+
 
   Widget _buildPublishNotificationTab(BuildContext context, AdminState state) {
     final List<NotificationModel>? notifications = state.notifications;
@@ -301,19 +355,6 @@ class AdminPage extends StatelessWidget {
   }
 
 
-
-  Future<void> _assignLesson(BuildContext context, String userId, FieldModel field) async {
-    final AdminCubit adminCubit = context.read<AdminCubit>();
-    final LessonModel lesson = LessonModel(
-      id: '', // The ID will be generated by Firestore
-      userId: userId,
-      title: 'Yeni Ders', // Adjust this to get actual lesson details
-      imageUrl: 'path_to_image', // Provide the actual image URL or path
-      createdAt: DateTime.now(), // The current date and time
-    );
-
-    await adminCubit.assignLesson(userId, lesson);
-  }
 
   Future<void> _showCreateNotificationDialog(BuildContext context, AdminCubit adminCubit) async {
     final formKey = GlobalKey<FormState>();
