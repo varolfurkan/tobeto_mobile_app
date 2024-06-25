@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
 import 'package:tobeto_mobile_app/screens/profile.dart';
-import 'package:tobeto_mobile_app/screens/what_do_we_offer.dart';
 import 'package:tobeto_mobile_app/screens/login_screen.dart';
 import 'package:tobeto_mobile_app/screens/home_page.dart';
 import 'package:tobeto_mobile_app/screens/reviews.dart';
@@ -11,13 +10,25 @@ import 'package:tobeto_mobile_app/screens/platform_page.dart';
 import 'package:tobeto_mobile_app/screens/catalog.dart';
 import 'package:tobeto_mobile_app/screens/calendar.dart';
 
-class DrawerMenu extends StatelessWidget {
+import '../screens/blog_page.dart';
+import '../screens/individuals_page.dart';
+import '../screens/institutions_page.dart';
+
+class DrawerMenu extends StatefulWidget {
+  const DrawerMenu({super.key});
+
+  @override
+  _DrawerMenuState createState() => _DrawerMenuState();
+}
+
+class _DrawerMenuState extends State<DrawerMenu> {
   final Widget svg = SvgPicture.asset(
     'img/icons/tobeto_icon.svg',
     semanticsLabel: 'Acme Logo',
   );
 
-  DrawerMenu({super.key});
+  bool _isExpandedWhatWeOffer = false;
+  bool _isExpandedWhatsHappening = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +46,8 @@ class DrawerMenu extends StatelessWidget {
                       onTap: () {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()),
                         );
                       },
                       child: SizedBox(width: 150, child: svg),
@@ -60,7 +72,8 @@ class DrawerMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()),
                         );
                       },
                     ),
@@ -70,7 +83,8 @@ class DrawerMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const ReviewsPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const ReviewsPage()),
                         );
                       },
                     ),
@@ -80,7 +94,8 @@ class DrawerMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const PlatformPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const PlatformPage()),
                         );
                       },
                     ),
@@ -90,7 +105,8 @@ class DrawerMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const CatalogPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const CatalogPage()),
                         );
                       },
                     ),
@@ -100,7 +116,8 @@ class DrawerMenu extends StatelessWidget {
                         Navigator.pop(context);
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const CalendarPage()),
+                          MaterialPageRoute(
+                              builder: (context) => const CalendarPage()),
                         );
                       },
                     ),
@@ -114,23 +131,161 @@ class DrawerMenu extends StatelessWidget {
                       onTap: () {},
                     ),
                     ListTile(
-                      title: const Text('Neler Sunuyoruz?'),
+                      title: Text(
+                        'Neler Sunuyoruz?',
+                        style: TextStyle(
+                            color: _isExpandedWhatWeOffer
+                                ? const Color.fromARGB(255, 153, 51, 255)
+                                : Colors.black),
+                      ),
                       onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const NelerSunuyoruzPage()),
-                        );
+                        setState(() {
+                          _isExpandedWhatWeOffer = !_isExpandedWhatWeOffer;
+                        });
                       },
                     ),
+                    if (_isExpandedWhatWeOffer)
+                      Column(
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                  const Color.fromARGB(255, 153, 51, 255),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  title: const Text(
+                                    'Bireyler için',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const IndividualsPage()),
+                                    );
+                                  },
+                                ),
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                  const Color.fromARGB(255, 153, 51, 255),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  title: const Text(
+                                    'Kurumlar için',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const InstitutionsPage()),
+                                    );
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
                     ListTile(
                       title: const Text('Eğitimlerimiz'),
                       onTap: () {},
                     ),
                     ListTile(
-                      title: const Text("Tobeto'da Neler Oluyor?"),
-                      onTap: () {},
+                      title: Text(
+                        "Tobeto'da Neler Oluyor?",
+                        style: TextStyle(
+                            color: _isExpandedWhatsHappening
+                                ? const Color.fromARGB(255, 153, 51, 255)
+                                : Colors.black),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _isExpandedWhatsHappening =
+                          !_isExpandedWhatsHappening;
+                        });
+                      },
                     ),
+                    if (_isExpandedWhatsHappening)
+                      Column(
+                        children: [
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                  const Color.fromARGB(255, 153, 51, 255),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  title: const Text(
+                                    'Blog',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                          const BlogPage()),
+                                    );
+                                  },
+                                ),
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                  const Color.fromARGB(255, 153, 51, 255),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  title: const Text(
+                                    'Basında Biz',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onTap: () {},
+                                ),
+                              )),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                  const Color.fromARGB(255, 153, 51, 255),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: ListTile(
+                                  title: const Text(
+                                    'İstanbul Kodluyor',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  onTap: () {},
+                                ),
+                              )),
+                        ],
+                      ),
                     ListTile(
                       title: const Text('İletişim'),
                       onTap: () {},
@@ -148,18 +303,23 @@ class DrawerMenu extends StatelessWidget {
                       Navigator.pop(context);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen()),
                       );
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all<Color>(Colors.black),
-                    minimumSize: WidgetStateProperty.all<Size>(const Size(300, 48)),
+                    backgroundColor:
+                    WidgetStateProperty.all<Color>(Colors.black),
+                    minimumSize:
+                    WidgetStateProperty.all<Size>(const Size(300, 48)),
                   ),
                   child: state.isLoading
                       ? const CircularProgressIndicator()
                       : Text(
-                    state.firebaseUser != null ? state.firebaseUser!.displayName ?? 'Profilim' : 'Giriş Yap',
+                    state.firebaseUser != null
+                        ? state.firebaseUser!.displayName ?? 'Profilim'
+                        : 'Giriş Yap',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -201,8 +361,8 @@ class DrawerMenu extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Çıkış Yap'),
-              onTap: ()  {
-                 context.read<UserCubit>().signOut();
+              onTap: () {
+                context.read<UserCubit>().signOut();
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const HomePage()),

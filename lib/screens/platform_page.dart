@@ -18,7 +18,7 @@ class PlatformPage extends StatelessWidget {
           semanticsLabel: 'Tobeto Logo',
         ),
       ),
-      endDrawer: DrawerMenu(),
+      endDrawer: const DrawerMenu(),
       body: BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           if (state.isLoading) {
@@ -256,7 +256,6 @@ class PlatformPage extends StatelessWidget {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                // Implement navigation to lesson details or another action
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.black, backgroundColor: Colors.grey[200],
