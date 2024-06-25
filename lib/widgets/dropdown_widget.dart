@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tobeto_mobile_app/screens/what_do_we_offer.dart';
 import 'package:tobeto_mobile_app/screens/login_screen.dart';
 import 'package:tobeto_mobile_app/screens/home_page.dart';
+import 'package:tobeto_mobile_app/screens/who_are_we.dart';
 
 class DropDownMenu extends StatelessWidget {
   DropDownMenu({super.key});
@@ -41,7 +42,12 @@ class DropDownMenu extends StatelessWidget {
           ),
           ListTile(
             title: const Text('Biz Kimiz?'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const WhoAreWe()),
+              );
+            },
           ),
           ListTile(
             title: const Text('Neler Sunuyoruz?'),
