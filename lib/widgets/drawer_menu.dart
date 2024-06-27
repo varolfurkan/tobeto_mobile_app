@@ -9,6 +9,7 @@ import 'package:tobeto_mobile_app/screens/reviews.dart';
 import 'package:tobeto_mobile_app/screens/platform_page.dart';
 import 'package:tobeto_mobile_app/screens/catalog.dart';
 import 'package:tobeto_mobile_app/screens/calendar.dart';
+import 'package:tobeto_mobile_app/screens/who_are_we.dart';
 
 import '../screens/blog_page.dart';
 import '../screens/individuals_page.dart';
@@ -128,7 +129,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
                   children: [
                     ListTile(
                       title: const Text('Biz Kimiz?'),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const WhoAreWe()),
+                        );
+                      },
                     ),
                     ListTile(
                       title: Text(

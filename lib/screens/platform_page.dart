@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
+import 'package:tobeto_mobile_app/screens/lesson_details_page.dart';
 import 'package:tobeto_mobile_app/widgets/drawer_menu.dart';
 
 class PlatformPage extends StatelessWidget {
@@ -256,6 +257,12 @@ class PlatformPage extends StatelessWidget {
                           children: [
                             ElevatedButton(
                               onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => LessonDetailsPage(lesson: lesson),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.black, backgroundColor: Colors.grey[200],

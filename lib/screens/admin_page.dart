@@ -23,7 +23,7 @@ class AdminPage extends StatelessWidget {
           semanticsLabel: 'Tobeto Logo',
         ),
       ),
-      endDrawer: DrawerMenu(),
+      endDrawer: const DrawerMenu(),
       body: BlocProvider(
         create: (context) => AdminCubit(UserRepository())..getCurrentUser(),
         child: BlocBuilder<AdminCubit, AdminState>(
@@ -157,6 +157,22 @@ class AdminPage extends StatelessWidget {
             Text('Seçilen öğrencilerin ders atamasını yapın:', style: GoogleFonts.poppins(textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
+              child: DropdownButton<String>(
+                hint: const Text('Alan Seçin'),
+                value: selectedFieldId,
+                items: fields.map((field) {
+                  return DropdownMenuItem<String>(
+                    value: field.fieldName,
+                    child: Text(field.fieldName),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  context.read<AdminCubit>().updateSelectedFieldId(value);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
               child: MultiSelectDialogField<UserModel>(
                 items: users.map((user) => MultiSelectItem<UserModel>(user, user.displayName)).toList(),
                 title: const Text('Öğrenci Seçin'),
@@ -181,22 +197,6 @@ class AdminPage extends StatelessWidget {
                 ),
                 onConfirm: (results) {
                   selectedUsers = results;
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: DropdownButton<String>(
-                hint: const Text('Alan Seçin'),
-                value: selectedFieldId,
-                items: fields.map((field) {
-                  return DropdownMenuItem<String>(
-                    value: field.fieldName,
-                    child: Text(field.fieldName),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  context.read<AdminCubit>().updateSelectedFieldId(value);
                 },
               ),
             ),

@@ -77,31 +77,54 @@ class UserRepository {
     try {
       List<LessonModel> fieldLessons = await getFieldLessons(fieldName);
 
-      DocumentReference userDocRef = _firestore.collection('users').doc(userId);
+      DocumentReference userDocRef = FirebaseFirestore.instance.collection('users').doc(userId);
 
-      WriteBatch batch = _firestore.batch();
+      WriteBatch batch = FirebaseFirestore.instance.batch();
 
       batch.set(userDocRef.collection('fields').doc(fieldName), {'fields_name': fieldName});
 
       for (var lesson in fieldLessons) {
-        DocumentReference lessonDocRef = userDocRef.collection('fields').doc(fieldName).collection('fields_lessons').doc();
-        batch.set(lessonDocRef, lesson.toMap());
+        DocumentReference lessonDocRef =
+        userDocRef.collection('fields').doc(fieldName).collection('field_lessons').doc();
+
+        // Prepare videos for assignment to user
+        Map<String, dynamic> videos = {};
+
+        // Iterate through each video entry in lesson's videos
+        lesson.videos.forEach((videoName, videoList) {
+          // Convert videoList to List<Map<String, dynamic>>
+          List<Map<String, dynamic>> formattedVideoList =
+          videoList.map((video) => {'videoName': video['videoName'], 'videoUrl': video['videoUrl']}).toList();
+
+          videos[videoName] = formattedVideoList;
+        });
+
+        // Create lesson data to save
+        Map<String, dynamic> lessonData = {
+          ...lesson.toMap(),
+          'videos': videos,
+        };
+
+        batch.set(lessonDocRef, lessonData);
       }
 
-      // Commit the batch write
       await batch.commit();
-
     } catch (e) {
       throw Exception('Error assigning lessons to user: $e');
     }
   }
 
+
+
+
+
   Future<List<LessonModel>> getFieldLessons(String fieldName) async {
     if (fieldName.isEmpty) {
       throw Exception('Field name is empty');
     }
+
     try {
-      var fieldsSnapshot = await _firestore
+      var fieldsSnapshot = await FirebaseFirestore.instance
           .collection('fields')
           .where('fields_name', isEqualTo: fieldName)
           .get();
@@ -112,7 +135,7 @@ class UserRepository {
 
       var fieldId = fieldsSnapshot.docs.first.id;
 
-      var lessonsSnapshot = await _firestore
+      var lessonsSnapshot = await FirebaseFirestore.instance
           .collection('fields')
           .doc(fieldId)
           .collection('field_lessons')
@@ -122,12 +145,49 @@ class UserRepository {
         throw Exception('No lessons found for this field name: $fieldName');
       }
 
-      var lessons = lessonsSnapshot.docs.map((doc) => LessonModel.fromMap(doc.data(), doc.id)).toList();
-      return lessons;
+      List<LessonModel> allLessons = [];
+
+      for (var lessonDoc in lessonsSnapshot.docs) {
+        var lessonData = lessonDoc.data();
+
+        // Fetch videos for the current lesson
+        var videosSnapshot = await lessonDoc.reference.collection('videos').get();
+        Map<String, List<Map<String, String>>> videos = {};
+
+        // Iterate through each video document
+        for (var videoDoc in videosSnapshot.docs) {
+          var videoData = videoDoc.data();
+          var videoName = videoDoc.id; // Video document ID as video name
+
+          List<Map<String, String>> videoFields = [];
+          // Extract each field and its value from the video document
+          videoData.forEach((field, value) {
+            videoFields.add({
+              'videoName': field,
+              'videoUrl': value.toString(),
+            });
+          });
+
+          videos[videoName] = videoFields;
+        }
+
+        LessonModel lesson = LessonModel.fromMap({
+          ...lessonData,
+          'videos': videos,
+        }, lessonDoc.id);
+
+        allLessons.add(lesson);
+      }
+
+      return allLessons;
     } catch (e) {
       throw Exception('Error fetching lessons: $e');
     }
   }
+
+
+
+
 
 
   Future<List<LessonModel>> getLessons(String userId) async {
@@ -137,13 +197,40 @@ class UserRepository {
       if (fieldsSnapshot.docs.isEmpty) {
         return [];
       }
+
       List<LessonModel> allLessons = [];
 
       for (var fieldDoc in fieldsSnapshot.docs) {
-        var lessonsSnapshot = await fieldDoc.reference.collection('fields_lessons').get();
+        var lessonsSnapshot = await fieldDoc.reference.collection('field_lessons').get();
 
-        var fieldLessons = lessonsSnapshot.docs.map((doc) => LessonModel.fromMap(doc.data(), doc.id)).toList();
-        allLessons.addAll(fieldLessons);
+        var fieldLessons = lessonsSnapshot.docs.map((doc) async {
+          var lessonData = doc.data();
+
+          // Ensure videos structure matches new format
+          Map<String, List<Map<String, String>>> videos = {};
+          if (lessonData['videos'] != null) {
+            lessonData['videos'].forEach((videoName, videoList) {
+              List<Map<String, String>> parsedVideos = [];
+              (videoList as List<dynamic>).forEach((video) {
+                if (video is Map<String, dynamic>) {
+                  parsedVideos.add({
+                    'videoName': video['videoName'] ?? '',
+                    'videoUrl': video['videoUrl'] ?? '',
+                  });
+                }
+              });
+              videos[videoName] = parsedVideos;
+            });
+          }
+
+          return LessonModel.fromMap({
+            ...lessonData,
+            'videos': videos,
+          }, doc.id);
+        });
+
+        // Wait for all lessons to be fetched before adding to allLessons list
+        allLessons.addAll(await Future.wait(fieldLessons));
       }
 
       return allLessons;
@@ -151,6 +238,8 @@ class UserRepository {
       throw Exception('Error fetching lessons for user $userId: $e');
     }
   }
+
+
 
 
 

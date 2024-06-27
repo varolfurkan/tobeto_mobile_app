@@ -6,20 +6,25 @@ class LessonModel {
   final String title;
   final String imageUrl;
   final DateTime createdAt;
+  final Map<String, List<Map<String, String>>> videos;
 
   LessonModel({
     required this.id,
     required this.title,
     required this.imageUrl,
     required this.createdAt,
+    required this.videos,
   });
 
-  factory LessonModel.fromMap(Map<String, dynamic> data, String id) {
+  factory LessonModel.fromMap(Map<String, dynamic> map, String id) {
     return LessonModel(
       id: id,
-      title: data['title'] ?? '',
-      imageUrl: data['imageUrl'] ?? '',
-      createdAt: data['createdAt'] != null ? (data['createdAt'] as Timestamp).toDate() : DateTime.now(),
+      title: map['title'] ?? '',
+      imageUrl: map['imageUrl'] ?? '',
+      videos: (map['videos'] ?? {}).map<String, List<Map<String, String>>>((key, value) {
+        return MapEntry<String, List<Map<String, String>>>(key, (value as List<dynamic>).cast<Map<String, String>>());
+      }),
+      createdAt: map['createdAt'] != null ? (map['createdAt'] as Timestamp).toDate() : DateTime.now(),
     );
   }
 
@@ -27,6 +32,7 @@ class LessonModel {
     return {
       'title': title,
       'imageUrl': imageUrl,
+      'videos': videos,
       'createdAt': Timestamp.fromDate(createdAt),
     };
   }
@@ -34,5 +40,4 @@ class LessonModel {
   String formattedDate() {
     return DateFormat('dd MMMM yyyy HH:mm', 'tr_TR').format(createdAt.toLocal());
   }
-
 }
