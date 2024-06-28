@@ -73,7 +73,7 @@ class _LessonDetailsPageState extends State<LessonDetailsPage> {
   void _onSliderChanged(double value) {
     setState(() {
       _currentSliderValue = value;
-      final Duration duration = _controllers[_selectedVideoIndex].value.duration!;
+      final Duration duration = _controllers[_selectedVideoIndex].value.duration;
       _controllers[_selectedVideoIndex].seekTo(duration * value);
     });
   }
