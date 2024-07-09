@@ -38,10 +38,7 @@ Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/bae9053c-64a8-4172-96ef-a9de12809635" width="300">
 
 #### Anasayfa
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/fa750047-24b1-4313-afb1-c0f0b4ffd659" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/fa750047-24b1-4313-afb1-c0f0b4ffd659.gif" width="300">
 
 #### Bireyler İçin
 <video width="300" controls>
