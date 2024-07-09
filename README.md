@@ -37,8 +37,8 @@ Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 #### Drawer 3
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/bae9053c-64a8-4172-96ef-a9de12809635" width="300">
 
-#### Anasayfa
-<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/fa750047-24b1-4313-afb1-c0f0b4ffd659.gif" width="300">
+### Anasayfa
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/8d103bb7-86c9-496e-a9c6-926856103a51" width="300">
 
 #### Bireyler İçin
 <video width="300" controls>
