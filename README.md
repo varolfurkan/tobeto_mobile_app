@@ -1,4 +1,4 @@
-### Kullanılan Teknolojiler
+![Login-Register](https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/ff287731-9eaf-4437-840a-cb7d12b3eba9)### Kullanılan Teknolojiler
 
 Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 
@@ -41,31 +41,19 @@ Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/8d103bb7-86c9-496e-a9c6-926856103a51" width="300">
 
 #### Bireyler İçin
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/f45e8f11-8b35-4465-a6a8-4c8f74a115d9" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/ac757e79-6278-4ba1-a7bf-12cea131d4cd" width="300">
 
 #### Biz Kimiz
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/bc5850db-77bb-4a6c-b7f3-582cd30d2e26" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/38bfc47e-4a61-4182-9669-71192abf38e1" width="300">
 
 #### Kurumlar İçin
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/2bb8cabb-7f31-4a7f-ba90-f91e461d486f" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/e2067c61-7604-4567-af79-018e485b0616" width="300">
 
 #### Blog
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/a0789c66-ff3b-4847-afbb-d3d94aa7964f" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/28328e2b-d61e-4f9b-a960-b64c5f629f63" width="300">
 
 #### Login/Register
-<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/d92be52b-7c5f-4158-a928-464a78110f7c" width="300">
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/68d4cc92-1493-4b39-8e2f-f878529432bb" width="300">
 
 #### Şifreler Eşleşmiyor
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/6b90e4ea-45f9-4dd9-be86-eb71f666e6ec" width="300">
@@ -83,22 +71,13 @@ Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/c68c8e1b-0dc2-4970-8e3d-971433dbd393" width="300">
 
 #### Google İle Giriş Yapma
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/bdc7a5f7-05d9-47c6-9ff9-cc1b61ae0cde" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/45d9ed19-980c-46ed-a83a-8872117a6530" width="300">
 
 #### Profil Resmi Ekleme
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/ab37c094-7aa2-4cf4-b4a2-297a609b2ba1" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/6c2eb669-610a-4135-a094-1f6320edd5df" width="300">
 
 #### Profil Sayfası
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/164a6ea0-7a31-4fb4-b621-d4d30a24cb02" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/21bf1543-2ce9-4c3a-9de7-f4b463191bde" width="300">
 
 #### Admin Eğitim Atama
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/cf488459-1dfb-479e-bdc6-a8e262feda15" width="300">
@@ -116,10 +95,7 @@ Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/af788f3f-a714-4a37-b009-e5bdcc5e69e9" width="300">
 
 #### Eğitimlerin Ekranı
-<video width="300" controls>
-  <source src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/3e101992-be49-46ef-9e89-95ddfd600c86" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/4f53aa3c-11fe-4ab7-902f-bd97ff6634a3" width="300">
 
 #### Duyuru Güncel
 <img src="https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/c52219f1-f612-4f18-bff8-6ea37be03043" width="300">
