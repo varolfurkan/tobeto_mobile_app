@@ -1,4 +1,4 @@
-#İstanbul Kodluyor Bitirme Projesi
+# İstanbul Kodluyor Bitirme Projesi
 İstanbul Kodluyor kapsamında yapmış olduğumuz mobil uygulama. Aşağıda resimler ve kullanılan teknolojiler hakkında detaylı bilgiler verilmiştir.
 ### Kullanılan Teknolojiler
 
