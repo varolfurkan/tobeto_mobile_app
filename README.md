@@ -1,4 +1,4 @@
-![Login-Register](https://github.com/varolfurkan/tobeto_mobile_app/assets/99636501/ff287731-9eaf-4437-840a-cb7d12b3eba9)### Kullanılan Teknolojiler
+### Kullanılan Teknolojiler
 
 Bu projede aşağıdaki teknolojiler ve kütüphaneler kullanılmıştır:
 
