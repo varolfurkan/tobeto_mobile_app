@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               semanticsLabel: 'Acme Logo'), // Uygulama logosu
         ),
       ),
-      endDrawer: DrawerMenu(),
+      endDrawer: const DrawerMenu(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8.0),

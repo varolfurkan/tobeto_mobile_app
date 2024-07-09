@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +6,7 @@ import 'package:tobeto_mobile_app/cubits/user_cubit.dart';
 import 'package:tobeto_mobile_app/screens/profile.dart';
 import 'package:tobeto_mobile_app/screens/login_screen.dart';
 import 'package:tobeto_mobile_app/screens/home_page.dart';
+import 'package:tobeto_mobile_app/screens/profile_page.dart';
 import 'package:tobeto_mobile_app/screens/reviews.dart';
 import 'package:tobeto_mobile_app/screens/platform_page.dart';
 import 'package:tobeto_mobile_app/screens/catalog.dart';
@@ -86,6 +88,17 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const ReviewsPage()),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      title: const Text('Profilim'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfilePage()),
                         );
                       },
                     ),
@@ -310,26 +323,62 @@ class _DrawerMenuState extends State<DrawerMenu> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const LoginScreen()),
+                          builder: (context) => const LoginScreen(),
+                        ),
                       );
                     }
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                    WidgetStateProperty.all<Color>(Colors.black),
-                    minimumSize:
-                    WidgetStateProperty.all<Size>(const Size(300, 48)),
+                    backgroundColor: WidgetStateProperty.all<Color>(Colors.black),
+                    minimumSize: WidgetStateProperty.all<Size>(const Size(300, 48)),
                   ),
-                  child: state.isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(
-                    state.firebaseUser != null
-                        ? state.firebaseUser!.displayName ?? 'Profilim'
-                        : 'Giriş Yap',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
+                  child: FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(state.firebaseUser?.uid)
+                        .get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasData && snapshot.data != null) {
+                        var userData = snapshot.data!;
+                        var data = userData.data() as Map<String, dynamic>? ?? {};
+
+                        var displayName = data.containsKey('displayName') && data['displayName'] != null
+                            ? data['displayName']
+                            : 'Profilim';
+
+                        var photoUrl = data.containsKey('photoUrl') && data['photoUrl'] != null
+                            ? data['photoUrl']
+                            : 'https://via.placeholder.com/150';
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              displayName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ),
+                            ),
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(photoUrl),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Text(
+                          state.firebaseUser != null
+                              ? state.firebaseUser!.displayName ?? 'Profilim'
+                              : 'Giriş Yap',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),
@@ -357,11 +406,11 @@ class _DrawerMenuState extends State<DrawerMenu> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: const Text('Profilim'),
+              title: const Text('Profilimi Güncelle'),
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const ProfilesPage()),
+                  MaterialPageRoute(builder: (context) =>  ProfileEdit()),
                 );
               },
             ),
